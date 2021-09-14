@@ -9,11 +9,17 @@ public class Participle {
     /**
      * 提取分词的文本组成新集合
      * @param str:要分词的文章
+     * @param stopWords:停用词集合
      * @return 分词集合
      */
-    static List<String> participle(String str) {
-        // 提取分词得到的泛型集合中的文本属性，去除所有标点符号，组成新的list集合
-        return HanLP.segment(str).stream().map(item -> item.word).filter(s -> !"`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ".contains(s)).collect(Collectors.toList());
+    static List<String> participle(String str, List<String> stopWords) {
+        // 关闭词性显示
+        HanLP.Config.ShowTermNature = false;
+        // 标准分词，取出 word属性组成新字符串集合
+        List<String> result = HanLP.segment(str).stream().map(item->item.word).collect(Collectors.toList());
+        // 去除停用词
+        result.removeAll(stopWords);
+        return result;
     }
 
     /**

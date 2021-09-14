@@ -1,14 +1,17 @@
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // 读取文件，内容保存至字符串变量中
         String str0 = IO.In(args[0]);
         String str1 = IO.In(args[1]);
+        // 停用字符集
+        List<String> stopWords = IO.stopWords();
 
         // 分词
-        List<String> list0 =  Participle.participle(str0);
-        List<String> list1 =  Participle.participle(str1);
+        List<String> list0 =  Participle.participle(str0, stopWords);
+        List<String> list1 =  Participle.participle(str1, stopWords);
         // 分词并集
         List<String> union = Participle.unionSet(list0, list1);
         // 计算词频

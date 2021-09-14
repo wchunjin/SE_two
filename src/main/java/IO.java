@@ -1,5 +1,7 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IO {
     /**
@@ -41,6 +43,44 @@ public class IO {
         }
 
         return article.toString();
+    }
+
+    /**
+     * 读取停用词文件
+     * @return 停用字符集
+     */
+    public static List<String> stopWords() {
+        InputStream is = null;
+        InputStreamReader sr = null;
+        BufferedReader br = null;
+        List<String> result = new ArrayList<>();
+        String line;
+        try {
+            // 读取停用词文件
+            // 通过类加载器读取resource目录下的文件
+            is = ClassLoader.getSystemClassLoader().getResourceAsStream("hit_stopwords.txt");
+            assert is != null;
+            sr = new InputStreamReader(is, StandardCharsets.UTF_8);
+            br = new BufferedReader(sr);
+            while ((line = br.readLine()) != null) {
+                result.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try{
+                // 释放资源
+                assert is != null;
+                is.close();
+                assert sr != null;
+                sr.close();
+                assert br != null;
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     /**
