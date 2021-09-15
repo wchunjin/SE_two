@@ -1,8 +1,7 @@
-import java.io.IOException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         // 读取文件，内容保存至字符串变量中
         String str0 = IO.In(args[0]);
         String str1 = IO.In(args[1]);

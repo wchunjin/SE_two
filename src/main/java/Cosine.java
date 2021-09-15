@@ -6,6 +6,13 @@ public class Cosine {
      * @return 字符类型的百分比数字
      */
     static String calculate(int[] arr0, int[] arr1) {
+        // 异常处理
+        if (arr0==null || arr1==null || arr0.length==0 || arr1.length == 0) {
+            throw new NullPointerException("错误：用于余弦计算的数组为空数组");
+        }
+        if (arr0.length != arr1.length) {
+            throw new ArrayIndexOutOfBoundsException("错误：用于余弦计算的数组长度为0");
+        }
         double result = 0;
         double median0 = 0; // 中间计算结果
         double median1 = 0;

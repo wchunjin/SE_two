@@ -10,36 +10,29 @@ public class IO {
      * @return 文件内容——字符串类型
      */
     public static String In(String fileName) {
-        StringBuilder article = new StringBuilder(); // 保存读取的文件内容
-        String line; // 每次读取一行文文件
-
+        if (fileName==null||fileName.trim().equals("")) {
+            throw new NullPointerException("错误：文件路径为空，找不到相关文件");
+        }
+        StringBuilder article; // 保存读取的文件内容
         // 采用字符缓冲流读取文件
-        File file = new File(fileName);
-        FileInputStream fis = null;
-        InputStreamReader isr = null;
-        BufferedReader br = null;
         try {
-            fis = new FileInputStream(file);
-            isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-            br = new BufferedReader(isr);
+            article = new StringBuilder();
+            File file = new File(fileName);
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(isr);
+            String line; // 每次读取一行文文件
             while ((line = br.readLine()) != null) {
                 // 追加当前读取的字符串
                 line = line.replaceAll("\\s+","");
                 article.append(line);
             }
+            // 释放资源
+            fis.close();
+            isr.close();
+            br.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try{
-                // 释放资源
-                assert isr != null;
-                isr.close();
-                assert br != null;
-                br.close();
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            throw new NullPointerException("错误：文件路径错误，找不到相关文件");
         }
 
         return article.toString();
@@ -50,35 +43,23 @@ public class IO {
      * @return 停用字符集
      */
     public static List<String> stopWords() {
-        InputStream is = null;
-        InputStreamReader sr = null;
-        BufferedReader br = null;
         List<String> result = new ArrayList<>();
-        String line;
         try {
             // 读取停用词文件
             // 通过类加载器读取resource目录下的文件
-            is = ClassLoader.getSystemClassLoader().getResourceAsStream("hit_stopwords.txt");
-            assert is != null;
-            sr = new InputStreamReader(is, StandardCharsets.UTF_8);
-            br = new BufferedReader(sr);
+            InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("hit_stopwords.txt");
+            assert null != is:"错误：找不到停用词文件";
+            InputStreamReader sr = new InputStreamReader(is, StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(sr);
+            String line;
             while ((line = br.readLine()) != null) {
                 result.add(line);
             }
+            is.close();
+            sr.close();
+            br.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try{
-                // 释放资源
-                assert is != null;
-                is.close();
-                assert sr != null;
-                sr.close();
-                assert br != null;
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            throw new AssertionError();
         }
         return result;
     }
@@ -89,21 +70,20 @@ public class IO {
      * @param fileName:写入文件路径
      */
     public static void Out(String content, String fileName){
-        File file = new File(fileName);
-        FileWriter fw = null;
+        if (content==null||content.trim().equals("")) {
+            throw new NullPointerException("错误：无写入内容");
+        }
+        if (fileName==null||fileName.trim().equals("")) {
+            throw new NullPointerException("错误：文件路径为空，无法写入文件");
+        }
         try {
-            fw = new FileWriter(file, true);
+            File file = new File(fileName);
+            FileWriter fw = new FileWriter(file, true);
             fw.write(content);
             fw.write("\r\n");
+            fw.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try{
-                assert fw != null;
-                fw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            throw new NullPointerException("错误：文件路径为错误，无法写入文件");
         }
     }
 }
