@@ -22,5 +22,6 @@ public class Main {
         IO.Out("原文路径："+args[0], args[2]);
         IO.Out("对比文章路径："+args[1], args[2]);
         IO.Out("相似度："+result, args[2]);
+        System.out.println("程序完成，已将结果写入指定文本，感谢使用。");
     }
 }
